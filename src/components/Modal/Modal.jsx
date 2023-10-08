@@ -1,38 +1,31 @@
-import { Component } from 'react';
+import { useEffect } from 'react';
 
-export class Modal extends Component {
-  handleOverlayClick = event => {
+export const Modal = ({ modalData, tags, isOpen, onCloseModal }) => {
+  const handleOverlayClick = event => {
     if (event.target === event.currentTarget) {
-      this.props.onCloseModal();
+      onCloseModal();
     }
   };
 
-  handleEscape = event => {
-    if (event.code === 'Escape') {
-      this.props.onCloseModal();
-    }
-  };
+  useEffect(() => {
+    const handleEscape = event => {
+      if (event.code === 'Escape') {
+        onCloseModal();
+      }
+    };
+    document.addEventListener('keydown', handleEscape);
+    return () => {
+      document.removeEventListener('keydown', handleEscape);
+    };
+  }, [onCloseModal]);
 
-  componentDidMount() {
-    document.addEventListener('mousedown', this.handleOverlayClick);
-    document.addEventListener('keydown', this.handleEscape);
-  }
-
-  componentWillUnmount() {
-    document.removeEventListener('mousedown', this.handleOverlayClick);
-    document.removeEventListener('keydown', this.handleEscape);
-  }
-
-  render() {
-    const { modalData, tags, isOpen } = this.props;
-    return (
-      isOpen && (
-        <div className="Overlay" onClick={this.handleOverlayClick}>
-          <div className="Modal">
-            <img src={modalData} alt={tags} />
-          </div>
+  return (
+    isOpen && (
+      <div className="Overlay" onClick={handleOverlayClick}>
+        <div className="Modal">
+          <img src={modalData} alt={tags} />
         </div>
-      )
-    );
-  }
-}
+      </div>
+    )
+  );
+};
