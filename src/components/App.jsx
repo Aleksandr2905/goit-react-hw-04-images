@@ -17,6 +17,7 @@ export const App = () => {
   const [showLoadMore, setShowLoadMore] = useState(false);
   const [modal, setModal] = useState({ isOpen: false, modalData: null });
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const fetchImage = async () => {
     try {
       setIsLoading(true);
@@ -37,7 +38,7 @@ export const App = () => {
 
   useEffect(() => {
     fetchImage();
-  }, [page, query]);
+  }, [fetchImage, page, query]);
 
   useEffect(() => {
     fetchRandomImages();
