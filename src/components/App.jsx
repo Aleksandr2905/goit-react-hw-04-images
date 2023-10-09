@@ -22,9 +22,10 @@ export const App = ({ handleInputChange }) => {
       try {
         setIsLoading(true);
         const requestedHits = await fetchRequest(query, page);
-        if (page === 1) {
+        if (query === '' && page === 1) {
           setHits(requestedHits.hits);
           setShowLoadMore(true);
+          return;
         } else {
           setHits(prevHits => [...prevHits, ...requestedHits.hits]);
           setShowLoadMore(true);
@@ -37,24 +38,6 @@ export const App = ({ handleInputChange }) => {
     };
     fetchImage();
   }, [page, query]);
-
-  useEffect(() => {
-    const fetchRandomImages = async () => {
-      try {
-        setIsLoading(true);
-        const randomHits = await fetchRequest(
-          Math.round(Math.random() * (100 - 10) + 10)
-        );
-        setHits(randomHits.hits);
-        setShowLoadMore(false);
-      } catch (error) {
-        setError(error.message);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    fetchRandomImages();
-  }, []);
 
   const onSubmit = tags => {
     setQuery(tags);
