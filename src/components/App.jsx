@@ -23,9 +23,11 @@ export const App = ({ handleInputChange }) => {
         setIsLoading(true);
         const requestedHits = await fetchRequest(query, page);
         if (query === '' && page === 1) {
+          return;
+        }
+        if (page === 1) {
           setHits(requestedHits.hits);
           setShowLoadMore(true);
-          return;
         } else {
           setHits(prevHits => [...prevHits, ...requestedHits.hits]);
           setShowLoadMore(true);
